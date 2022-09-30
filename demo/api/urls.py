@@ -9,4 +9,5 @@ urlpatterns = [
     path('latest/', views.blogLatest, name="Blog Latest"),
     path('astroCurr/', views.astroCurr, name="Astro Current"),
     path('makepost/', views.makeBlog, name="Make Post"),
+    path('iss/', views.locISS, name="IssLoc"),
 ]

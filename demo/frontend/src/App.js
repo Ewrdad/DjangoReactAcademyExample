@@ -2,6 +2,9 @@
 //Styles
 import logo from './banner.png';
 import './App.css';
+
+//unused attempt to have live location
+import Loc from "./Location";
 //Importing State and effect management
 import React,{useState,useEffect} from 'react';
 
@@ -13,60 +16,68 @@ function App() {
   const [currAstros,setCurrAstros]=useState([]);
   //Esttablishes current prominent post on page
   const [currPost,setCurrPost]=useState([]);
-
+  console.log("Variables established")
 
 //Retreive api data functions
 //Gets information for blog list
   const getData=()=>{
         fetch('http://127.0.0.1:8000/api/list/?format=json'  ,{headers : { 'Content-Type': 'application/json','Accept': 'application/json'}})
          .then(function(response){
-          console.log(response)
+          //console.log(response)
           return response.json();})
           .then(function(myJson) {
-            console.log(myJson);
+            //console.log(myJson);
            setData(myJson)
           })};
   //Gets latest blog post
    const getTopPost=()=>{
           fetch('http://localhost:8000/api/latest/?format=json',{headers : {'Content-Type': 'application/json', 'Accept': 'application/json'} } )
-         .then(function(response){console.log(response) 
+         .then(function(response){
+          //console.log(response) 
           return response.json();})
           .then(function(myJson) {
-          console.log(myJson);
+          //console.log(myJson);
            setCurrPost(myJson)
           })};
         //Gets current astronauts in space
     const getCurrAstros=()=>{
           fetch('http://localhost:8000/api/astroCurr/?format=json',{headers : {'Content-Type': 'application/json', 'Accept': 'application/json'} } )
-          .then(function(response){console.log(response) 
+          .then(function(response){
+            //console.log(response) 
           return response.json();})
           .then(function(myJson) {
-          console.log(myJson);
+          //console.log(myJson);
           setCurrAstros(myJson)
             })
             };  
     //Gets specific post, assigns to curr post        
     const getCurrPost=(props)=>{
+      try{
       fetch('http://localhost:8000/api/detail/'+props+'/?format=json',{headers : {'Content-Type': 'application/json', 'Accept': 'application/json'} } )
- .then(function(response){console.log("I am here!",response) 
+ .then(function(response){
+  //console.log("I am here!",response) 
   return response.json();})
   .then(function(myJson) {
-  console.log(myJson);
+  //console.log(myJson);
    setCurrPost(myJson)
-  });
+  })}
+  catch(err){
+    console.log("Error in retrieving post data",err)
+  };
 
 
     }
 
     //On launch gather data
       useEffect(()=>{
+            
              getData();
-             
+            
              getCurrAstros();
 
              getTopPost();
              
-             
+             console.log("loaded initail data");
               },[])
     
 
@@ -93,7 +104,7 @@ const SearchForm = () => {
 //submits data to get current post
   const doSubmit = (e) => {
     e.preventDefault()
-    console.log(formData);
+    //console.log(formData);
     //Provides an alert to noitify the user of a wrongfull submission
     if (formData.postID<=-1){
       alert("Blog IDs Start at 1")
@@ -104,7 +115,7 @@ const SearchForm = () => {
       alert("I accidentally deleted 2. So now enjoy this pop up(Try again)")
       return null;
     }
-
+    console.log("form submitted");
 
    
 
@@ -126,14 +137,15 @@ const SearchForm = () => {
       <button onClick={doSubmit}>Submit</button>
     </>
   );
-};// onSubmit={getCurrPost(item.postID)}
+};// 
 
-
+//<Loc />
 //main page
    return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        
         
   <table><tbody><tr><td> 
     <div className="App Blog-Posts">
@@ -143,7 +155,7 @@ const SearchForm = () => {
        
        <SearchForm />
        <button onClick={() => getTopPost()}>Reset</button>
-       {data && data.length>0 && data.map((item)=><div><h1>{item.postTitle}</h1><img src={item.postPic} className="blog-img" alt={"BlogID: "+item.postID}></img><p><button onClick={() => getCurrPost(item.postID)} type="submit">{"BlogID: "+item.postID}</button></p></div>)}
+       {data && data.length>0 && data.map((item)=><div key={item.postID}><h1>{item.postTitle}</h1><img src={item.postPic} className="blog-img" alt={"BlogID: "+item.postID}></img><p><button onClick={() => getCurrPost(item.postID)} type="submit">{"BlogID: "+item.postID}</button></p></div>)}
        
 
        </div> </td>
@@ -154,7 +166,7 @@ const SearchForm = () => {
     <p>Currently in space is: </p>
      {
        
-       currAstros && currAstros.length>0 && currAstros.map((item)=><div><tr><td className='spacePeeps'><h3><b>{item.astroName}</b></h3> <p>{item.astroCraft}</p></td></tr></div>)
+       currAstros && currAstros.length>0 && currAstros.map((item)=><div key={item.astorID}><tr><td className='spacePeeps'><h3><b>{item.astroName}</b></h3> <p>{item.astroCraft}</p></td></tr></div>)
      }
 
     

@@ -139,7 +139,8 @@ STATICFILES_DIRS = [
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "http://*"
+    "http://*",
+    "http://api.open-notify.org",
 
 ]
 
@@ -148,19 +149,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:8000",
-    "http://*"
+    "http://*",
+    "http://api.open-notify.org",
 
     ]
 
-
-CORS_ALLOW_METHODS = [
-'DELETE',
-'GET',
-'OPTIONS',
-'PATCH',
-'POST',
-'PUT',
-]
 
 #REST_FRAMEWORK = {
  #   'DEFAULT_AUTHENTICATION_CLASSES': (
